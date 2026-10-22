@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 
 // Redirect root ke daftar produk
@@ -25,8 +26,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 // Produk (bisa diakses semua orang)
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 
-// Keranjang + Order (harus login)
-Route::middleware('auth')->group(function () {
+// Keranjang + Order (harus login Customer)
+Route::middleware('auth','can:use-cart')->group(function () {
     // Keranjang
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/tambah', [CartController::class, 'tambah'])->name('cart.tambah');
@@ -40,3 +41,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id_order}', [OrderController::class, 'show'])->name('orders.show');
 });
+
+// role management (Admin)
+Route::patch('/admin/users/{user}/role',
+    [RoleController::class, 'update'])
+    ->middleware(['auth', 'can:manage-roles'])
+    ->name('admin.users.role.update');
+
+Route::get('/admin/users', [RoleController::class, 'index'])
+    ->middleware(['auth', 'can:manage-roles'])
+    ->name('admin.users.index');
