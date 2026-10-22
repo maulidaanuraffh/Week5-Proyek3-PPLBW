@@ -98,8 +98,14 @@
     <div class="nav-links">
         <a href="{{ route('products.index') }}">Beranda</a>
         @auth
-            <a href="{{ route('cart.index') }}">Keranjang ({{ array_sum(array_column(session('keranjang', []), 'jumlah')) }})</a>
-            <a href="{{ route('orders.index') }}">Pesanan Saya</a>
+            @can('use-cart')
+                <a href="{{ route('cart.index') }}">Keranjang ({{ array_sum(array_column(session('keranjang', []), 'jumlah')) }})</a>
+                <a href="{{ route('orders.index') }}">Pesanan Saya</a>
+            @endcan
+            
+            @can('manage-roles')
+                <a href="{{ route('admin.users.index') }}">Kelola User</a>
+            @endcan
             <form method="POST" action="{{ route('logout') }}" style="display:inline">
                 @csrf
                 <button type="submit" class="btn-nav">Logout</button>
