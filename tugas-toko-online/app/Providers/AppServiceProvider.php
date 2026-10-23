@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
             fn (User $user): bool => $user->role === 'admin');
         Gate::define('adjust-stock',
             fn (User $user): bool => in_array(
-                $user->role, ['staff', 'admin'], true
+                $user->role, ['staff', 'staff', 'admin'], true
             ));
         Gate::define('use-cart', 
             fn (User $user): bool => $user->role === 'customer');
