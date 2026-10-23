@@ -34,17 +34,15 @@
             <p style="font-weight: bold; font-size: 0.95rem; margin-bottom: 0.3rem;">{{ $product->nama_barang }}</p>
             <p style="color: #2e5a0e; font-weight: bold; font-size: 0.9rem;">Rp {{ number_format($product->harga, 0, ',', '.') }}</p>
 
-            @can('adjust-stock')
+            @if ($product->stok == 0)
+                <p style="font-size: 0.8rem; color: #a83232; font-weight: bold; margin-bottom: 0.75rem;">
+                    Stok habis
+                </p>
+            @else 
                 <p style="font-size: 0.8rem; color: #444; margin-bottom: 0.75rem;">
                     Stok: {{ $product->stok }}
                 </p>
-            @else
-                @if ($product->stok == 0)
-                    <p style="font-size: 0.8rem; color: #a83232; font-weight: bold; margin-bottom: 0.75rem;">
-                        Stok habis
-                    </p>
-                @endif
-            @endcan
+            @endif
 
             @can('use-cart')
                 @if ($product->stok > 0)
